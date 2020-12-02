@@ -1,0 +1,70 @@
+# Serverinstall for debian machines v1.1
+# does:
+# - apt update && upgrade && install things
+# - tzdata && locales
+# - dump motd
+# - adduser martin w/o pw
+# - new root pw
+# - new hostname
+# - sshkey for martin
+# - sshd: key only login, port 222
+# - profilebanner
+# - aliases
+# - bash colors (green user/purple root)
+# - no-pw sudo for apt for martin
+# - warning check sshd manually
+# - test logins (user/root)
+# - remove default ubuntu/pi users
+
+#!/bin/bash
+
+echo -e "\e[35mUpdating\e[0m"
+apt update && apt upgrade -y
+echo -e "\e[35mInstalling dnsutils+screen+curl\e[0m"
+apt install nano dnsutils screen curl ca-certificates apt-transport-https dialog htop fd-find ncdu tldr ack pydf zip -y
+curl -o /sbin/prettyping https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping && chmod +x /sbin/prettyping
+echo -e "\e[35mtzdata && locale\e[0m"
+dpkg-reconfigure tzdata && dpkg-reconfigure locales
+echo -e "\e[35mDumping modt\e[0m"
+echo "" > /etc/motd
+echo -e "\e[35muser martin\e[0m"
+adduser --disabled-password --gecos "" martin
+echo -e "\e[35mnew root pass\e[0m"
+passwd root
+echo -e "\e[35mnew hostname\e[0m"
+read -p 'New Hostname: ' hostname
+hostname $hostname
+echo -e "\e[35medit etc hostname\e[0m"
+nano /etc/hostname
+echo -e "\e[35msshkey for martin\e[0m"
+mkdir /home/martin/.ssh && echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1ppsf3ClLh/HCQzLjr/S2CyuPZsTngFyiqZb0jd9AI martin@DESKTOP" >> /home/martin/.ssh/authorized_keys && chown -R martin.martin /home/martin/.ssh
+echo -e "\e[35mssh key only, port 222 && restart\e[0m"
+sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && service sshd restart && service sshd status
+echo -e "\e[35mAliases & Profile-Banner\e[0m"
+echo "echo \"\"" >> /etc/profile
+echo "echo \"################################\"" >> /etc/profile
+echo "echo \"# Hallo ${USER}, $HOSTNAME ab hier ;) #\"" >> /etc/profile
+echo "echo \"################################\"" >> /etc/profile
+echo "echo \"\"" >> /etc/profile
+echo "alias ll='ls -la --color=auto'" >> /etc/profile
+echo "alias checkupdates='sudo apt update && sudo apt -y upgrade'" >> /etc/profile
+echo "alias ping='prettyping --nolegend --nounicode'" >> /etc/profile
+echo "alias top='htop'" >> /etc/profile
+echo "alias find='fdfind'" >> /etc/profile
+echo "alias du='ncdu --color dark -rr'" >> /etc/profile
+echo "alias df='pydf'" >> /etc/profile
+source /etc/profile
+HISTCONTROL="ignorespace:erasedups"
+export HISTCONTROL
+echo -e "\e[35mpurple root bash prompt\e[0m"
+echo "PS1='${debian_chroot:+($debian_chroot)}\[\033[1;35m\]\u@\h\[\033[00m\]:\[\033[1;30m\]\w\[\033[00m\]\$ '" >>/root/.bashrc
+source /root/.bashrc
+echo -e "\e[35mupdates-sudo\e[0m"
+read -p "Copy: \nmartin  ALL=(ALL) NOPASSWD: `which apt`"
+visudo
+echo -e "\e[93mSSHD_CONFIG CHECKEN - PasswordAuthentication\e[0m"
+read -p "Mache eine zweite Shell auf und schau ob du dich anmelden kannst. Im nächsten Schritt lösche ich alle USER, die per default installiert sind. Enter für weiter."
+echo -e "\e[93mUser löschen - pi/ubuntu\e[0m"
+deluser --remove-home pi
+deluser --remove-home ubuntu
