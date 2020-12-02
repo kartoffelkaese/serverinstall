@@ -61,7 +61,7 @@ echo -e "\e[35mpurple root bash prompt\e[0m"
 echo "PS1='${debian_chroot:+($debian_chroot)}\[\033[1;35m\]\u@\h\[\033[00m\]:\[\033[1;30m\]\w\[\033[00m\]\$ '" >>/root/.bashrc
 source /root/.bashrc
 echo -e "\e[35mupdates-sudo\e[0m"
-read -p "Copy: \nmartin  ALL=(ALL) NOPASSWD: `which apt`"
+read -p "Copy: martin  ALL=(ALL) NOPASSWD: `which apt`"
 visudo
 echo -e "\e[93mSSHD_CONFIG CHECKEN - PasswordAuthentication\e[0m"
 read -p "Mache eine zweite Shell auf und schau ob du dich anmelden kannst. Im nächsten Schritt lösche ich alle USER, die per default installiert sind. Enter für weiter."
