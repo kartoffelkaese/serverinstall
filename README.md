@@ -1,4 +1,4 @@
-# Serverinstall for debian machines v1.1
+# Installfile for debian-based machines v1.1
 apt install curl && curl -O https://raw.githubusercontent.com/kartoffelkaese/serverinstall/main/install && chmod +x install && ./install
 
 # does:
