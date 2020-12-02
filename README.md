@@ -1,6 +1,7 @@
 # Serverinstall for debian machines v1.1
-# # apt install curl && curl -O https://raw.githubusercontent.com/kartoffelkaese/serverinstall/main/install && chmod +x install && ./install
-does:
+apt install curl && curl -O https://raw.githubusercontent.com/kartoffelkaese/serverinstall/main/install && chmod +x install && ./install
+
+# does:
 - apt update && upgrade && install things
 - tzdata && locales
 - dump motd
