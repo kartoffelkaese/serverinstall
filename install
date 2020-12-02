@@ -1,3 +1,23 @@
+# Serverinstall for debian machines v1.1
+# does:
+# - apt update && upgrade && install things
+# - tzdata && locales
+# - dump motd
+# - adduser martin w/o pw
+# - new root pw
+# - new hostname
+# - sshkey for martin
+# - sshd: key only login, port 222
+# - profilebanner
+# - aliases
+# - bash colors (green user/purple root)
+# - no-pw sudo for apt for martin
+# - warning check sshd manually
+# - test logins (user/root)
+# - remove default ubuntu/pi users
+
+#!/bin/bash
+
 echo -e "\e[35mUpdating\e[0m"
 apt update && apt upgrade -y
 echo -e "\e[35mInstalling dnsutils+screen+curl\e[0m"
@@ -17,7 +37,7 @@ hostname $hostname
 echo -e "\e[35medit etc hostname\e[0m"
 nano /etc/hostname
 echo -e "\e[35msshkey for martin\e[0m"
-mkdir /home/martin/.ssh && echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1ppsf3ClLh/HCQzLjr/S2CyuPZsTngFyiqZb0jd9AI martin@DESKTOP" >> /home/martin/.ssh/authorized_keys && chown -R martin.martin /home/martin/.ssh
+mkdir /home/martin/.ssh && echo "ssh-ed25519 KEY martin@DESKTOP" >> /home/martin/.ssh/authorized_keys && chown -R martin.martin /home/martin/.ssh
 echo -e "\e[35mssh key only, port 222 && restart\e[0m"
 sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && service sshd restart && service sshd status
