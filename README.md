@@ -2,6 +2,7 @@
 apt install curl && curl -O https://raw.githubusercontent.com/kartoffelkaese/serverinstall/main/install && chmod +x install && ./install
 
 # does:
+- changing default mirror
 - apt update && upgrade && install things
 - tzdata && locales
 - dump motd
