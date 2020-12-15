@@ -1,6 +1,6 @@
-# Serverinstall for debian machines v1.2
+# Serverinstall for debian machines v1.3
 # does:
-# - mirrors for apt
+# - mirrors for apt w/ choose option
 # - apt update && upgrade && install things
 # - tzdata && locales
 # - dump motd
@@ -19,12 +19,15 @@
 #!/bin/bash
 
 echo -e "\e[35mChanging Mirrors\e[0m"
-echo -e "\e[35mBitte die entsprechenden Einträge bearbeiten! - Beende.\e[0m" && exit 1
 mv /etc/apt/sources.list /etc/apt/sources.list-old
-# raspbian - buster
-#echo "deb https://ftp.halifax.rwth-aachen.de/raspbian/raspbian/ buster main contrib non-free rpi" > /etc/apt/sources.list
-# debian - buster
-#echo -e "deb http://mirror.de.leaseweb.net/debian buster main\ndeb http://mirror.de.leaseweb.net/debian buster-updates main\ndeb http://security.debian.org/ buster/updates main\ndeb http://ftp2.de.debian.org/debian buster-backports main" >> test
+echo -n "Raspbian/Debian 1/2: "
+read DIST
+if [[ $DIST == 1 ]]
+then
+  echo "deb https://ftp.halifax.rwth-aachen.de/raspbian/raspbian/ buster main contrib non-free rpi" > /etc/apt/sources.list
+else
+    echo -e "deb http://mirror.de.leaseweb.net/debian buster main\ndeb http://mirror.de.leaseweb.net/debian buster-updates main\ndeb http://security.debian.org/ buster/updates main\ndeb http://ftp2.de.debian.org/debian buster-backports main" >> /etc/apt/sources.list
+fi
 echo -e "\e[35mUpdating\e[0m"
 apt update && apt upgrade -y
 echo -e "\e[35mInstalling dnsutils+screen+curl\e[0m"
