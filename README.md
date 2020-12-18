@@ -1,5 +1,5 @@
 # Installfile for debian-based machines v1.1
-apt install curl && curl -O https://raw.githubusercontent.com/kartoffelkaese/serverinstall/main/install && chmod +x install && ./install
+apt update && apt install curl && curl -O https://raw.githubusercontent.com/kartoffelkaese/serverinstall/main/install && chmod +x install && ./install
 
 # does:
 - changing default mirror
