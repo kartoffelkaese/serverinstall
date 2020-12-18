@@ -31,7 +31,7 @@ fi
 echo -e "\e[35mUpdating\e[0m"
 apt update && apt upgrade -y
 echo -e "\e[35mInstalling dnsutils+screen+curl\e[0m"
-apt install nano dnsutils screen curl ca-certificates apt-transport-https dialog htop fd-find ncdu tldr ack pydf zip -y
+apt install nano dnsutils screen curl ca-certificates apt-transport-https dialog htop fd-find ncdu tldr ack pydf zip sudo -y
 curl -o /sbin/prettyping https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping && chmod +x /sbin/prettyping
 echo -e "\e[35mtzdata && locale\e[0m"
 dpkg-reconfigure tzdata && dpkg-reconfigure locales
