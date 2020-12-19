@@ -1,8 +1,8 @@
-# Installfile for debian-based machines v1.1
+# Installfile for debian-based machines v1.4
 apt update && apt install curl && curl -O https://raw.githubusercontent.com/kartoffelkaese/serverinstall/main/install && chmod +x install && ./install
 
 # does:
-- changing default mirror
+- changing default mirror (raspbian/debian)
 - apt update && upgrade && install things
 - tzdata && locales
 - dump motd
@@ -18,3 +18,4 @@ apt update && apt install curl && curl -O https://raw.githubusercontent.com/kart
 - warning check sshd manually
 - test logins (user/root)
 - remove default ubuntu/pi users
+- custom wsl things
