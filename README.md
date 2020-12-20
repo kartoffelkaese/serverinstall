@@ -1,5 +1,6 @@
 # Installfile for debian-based machines v1.4
-apt update && apt install curl && curl -O https://raw.githubusercontent.com/kartoffelkaese/serverinstall/main/install && chmod +x install && ./install
+bash <(curl -s inst.gcal.ch)
+(obvsly you need curl to be installed)
 
 # does:
 - changing default mirror (raspbian/debian)
