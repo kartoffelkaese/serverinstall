@@ -55,7 +55,7 @@ sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && service sshd restart
 echo -e "\e[45mAliases & Profile-Banner\e[0m"
 echo "echo \"\"" >> /etc/profile
 echo "echo \"################################\"" >> /etc/profile
-echo "echo \"# Hallo ${USER}, $HOSTNAME ab hier ;) #\"" >> /etc/profile
+echo "echo \"# Hallo \${USER}, \$HOSTNAME ab hier ;) #\"" >> /etc/profile
 echo "echo \"################################\"" >> /etc/profile
 echo "echo \"\"" >> /etc/profile
 echo "alias ll='ls -la --color=auto'" >> /etc/profile
