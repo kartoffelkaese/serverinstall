@@ -4,10 +4,9 @@
 # - apt update && upgrade && install things
 # - tzdata && locales
 # - dump motd
-# - adduser martin w/o pw
+# - test for user martin (adduser martin w/o pw, sshkey)
 # - new root pw
 # - new hostname
-# - sshkey for martin
 # - sshd: key only login, port 222
 # - profilebanner
 # - aliases
@@ -19,6 +18,7 @@
 # - custom wsl things.
 #!/bin/bash
 
+# MIRRORS
 echo -e "\e[45mChanging Mirrors\e[0m"
 mv /etc/apt/sources.list /etc/apt/sources.list-old
 echo -n "Raspbian/Debian 1/2: "
@@ -29,29 +29,40 @@ then
 else
     echo -e "deb http://mirror.de.leaseweb.net/debian buster main\ndeb http://mirror.de.leaseweb.net/debian buster-updates main\ndeb http://security.debian.org/ buster/updates main\ndeb http://ftp2.de.debian.org/debian buster-backports main" >> /etc/apt/sources.list
 fi
+
+# INSTALL THINGS
 echo -e "\e[45mUpdating\e[0m"
 apt update && apt upgrade -y
 echo -e "\e[45mInstalling dnsutils+screen+curl\e[0m"
 apt install nano dnsutils screen curl ca-certificates apt-transport-https dialog htop fd-find ncdu tldr ack pydf zip sudo -y
 curl -o /sbin/prettyping https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping && chmod +x /sbin/prettyping
+
+# USER MARTIN
+echo -e "\e[45muser martin\e[0m"
+if id "martin" >/dev/null 2>&1; then
+        echo -e "\e[45muser martin still exists\e[0m"
+else
+        adduser --disabled-password --gecos "" martin
+fi
+echo -e "\e[45msshkey for martin\e[0m"
+mkdir /home/martin/.ssh && echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1ppsf3ClLh/HCQzLjr/S2CyuPZsTngFyiqZb0jd9AI martin@DESKTOP" >> /home/martin/.ssh/authorized_keys && chown -R martin.martin /home/martin/.ssh
+echo -e "\e[45mupdates-sudo\e[0m"
+read -p "Copy: martin  ALL=(ALL) NOPASSWD: `which apt`"
+visudo
+
+# ROOT
+echo -e "\e[45mnew root pass\e[0m"
+passwd root
+
+# SYSTEM
 echo -e "\e[45mtzdata && locale\e[0m"
 dpkg-reconfigure tzdata && dpkg-reconfigure locales
 echo -e "\e[45mDumping modt\e[0m"
 echo "" > /etc/motd
-echo -e "\e[45muser martin\e[0m"
-adduser --disabled-password --gecos "" martin
-echo -e "\e[45mnew root pass\e[0m"
-passwd root
 echo -e "\e[45mnew hostname\e[0m"
 read -p 'New Hostname: ' hostname
 hostname $hostname
-echo -e "\e[45medit etc hostname\e[0m"
-nano /etc/hostname
-echo -e "\e[45msshkey for martin\e[0m"
-mkdir /home/martin/.ssh && echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1ppsf3ClLh/HCQzLjr/S2CyuPZsTngFyiqZb0jd9AI martin@DESKTOP" >> /home/martin/.ssh/authorized_keys && chown -R martin.martin /home/martin/.ssh
-echo -e "\e[45mssh key only, port 222 && restart\e[0m"
-sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && service sshd restart
+echo $HOSTNAME > /etc/hostname
 echo -e "\e[45mAliases & Profile-Banner\e[0m"
 echo "echo \"\"" >> /etc/profile
 echo "echo \"################################\"" >> /etc/profile
@@ -71,15 +82,19 @@ export HISTCONTROL
 echo -e "\e[45mpurple root bash prompt\e[0m"
 echo "PS1='${debian_chroot:+($debian_chroot)}\[\033[1;35m\]\u@\h\[\033[00m\]:\[\033[1;30m\]\w\[\033[00m\]\$ '" >>/root/.bashrc
 source /root/.bashrc
-echo -e "\e[45mupdates-sudo\e[0m"
-read -p "Copy: martin  ALL=(ALL) NOPASSWD: `which apt`"
-visudo
+
+# SSHD
+echo -e "\e[45mssh key only, port 222 && restart\e[0m"
+sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && service sshd restart
 echo -e "\e[93mSSHD_CONFIG CHECKEN - PasswordAuthentication\e[0m"
 read -p "Mache eine zweite Shell auf und schau ob du dich anmelden kannst. Im nächsten Schritt lösche ich alle USER, die per default installiert sind. Enter für weiter."
 echo -e "\e[93mUser löschen - pi/ubuntu\e[0m"
 deluser --remove-home pi
 deluser --remove-home ubuntu
-echo -n "WSL? (ssh/config+mount usb) 1 yes/ 0 no"
+
+# WSL
+echo -n "WSL? (.ssh/config+mount usb) [1] yes / [0] no"
 read YN
 if [[ $YN == 1 ]]
 then
