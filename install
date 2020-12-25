@@ -1,4 +1,4 @@
-# Serverinstall for debian machines v1.4
+# Serverinstall for debian machines v1.5
 # does:
 # - mirrors for apt w/ choose option
 # - apt update && upgrade && install things
@@ -15,7 +15,7 @@
 # - warning check sshd manually
 # - test logins (user/root)
 # - remove default ubuntu/pi users
-# - custom wsl things.
+# - custom wsl things
 #!/bin/bash
 
 # MIRRORS
