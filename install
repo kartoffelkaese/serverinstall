@@ -18,6 +18,11 @@
 # - custom wsl things
 #!/bin/bash
 
+if [ "$UID" -gt 0 ]; then
+     echo "Bitte als root ausführen!"
+     exit 1
+fi
+
 # MIRRORS
 echo -e "\e[45mChanging Mirrors\e[0m"
 mv /etc/apt/sources.list /etc/apt/sources.list-old
