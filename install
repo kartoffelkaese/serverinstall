@@ -39,8 +39,7 @@ fi
 echo -e "\e[45mUpdating\e[0m"
 apt update && apt upgrade -y
 echo -e "\e[45mInstalling dnsutils+screen+curl\e[0m"
-apt install nano dnsutils screen curl ca-certificates apt-transport-https dialog htop fd-find ncdu tldr ack pydf zip sudo -y
-curl -o /sbin/prettyping https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping && chmod +x /sbin/prettyping
+apt install nano dnsutils screen curl ca-certificates apt-transport-https dialog htop fd-find ncdu tldr ack pydf zip sudo prettyping -y
 
 # USER MARTIN
 echo -e "\e[45muser martin\e[0m"
