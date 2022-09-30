@@ -102,7 +102,7 @@ echo -n "WSL? (.ssh/config+mount usb) [1] yes / [0] no"
 read YN
 if [[ $YN == 1 ]]
 then
-  mkdir ~/usb && echo "sudo mount -t drvfs i: ~/usb" >> ~/.bashrc && sudo mount -t drvfs i: ~/usb && touch ~/.ssh/config && cat /mnt/g/configs/ssh-config.txt > ~/.ssh/config
+  mkdir ~/usb && echo "sudo mount -t drvfs i: ~/usb" >> ~/.bashrc && sudo mount -t drvfs i: ~/usb && touch ~/.ssh/config && cat ~/usb/configs/ssh-config.txt > ~/.ssh/config
 else
     echo "selected nope."
 fi
