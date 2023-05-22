@@ -52,7 +52,7 @@ echo -e "\e[45msshkey for martin\e[0m"
 mkdir /home/martin/.ssh && echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1ppsf3ClLh/HCQzLjr/S2CyuPZsTngFyiqZb0jd9AI martin@DESKTOP" >> /home/martin/.ssh/authorized_keys && chown -R martin.martin /home/martin/.ssh
 echo -e "\e[45mupdates-sudo\e[0m"
 read -p "Copy: martin  ALL=(ALL) NOPASSWD: `which apt`"
-visudo -f /etc/sudoers
+visudo
 
 # ROOT
 echo -e "\e[45mnew root pass\e[0m"
