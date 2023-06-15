@@ -91,6 +91,9 @@ source /root/.bashrc
 echo -e "\e[45mssh key only, port 222 && restart\e[0m"
 sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 echo "AuthenticationMethods publickey" >> /etc/ssh/sshd_config
+sed -i 's/#HostKey /etc/ssh/ssh_host_ed25519_key/HostKey /etc/ssh/ssh_host_ed25519_key/g' /etc/ssh/sshd_config
+echo "KexAlgorithms curve25519-sha256" >> /etc/ssh/sshd_config
+echo "MACs hmac-sha2-512-etm@openssh.com" >> /etc/ssh/sshd_config
 sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && service sshd restart
 echo -e "\e[93mSSHD_CONFIG CHECKEN - PasswordAuthentication\e[0m"
 read -p "Mache eine zweite Shell auf und schau ob du dich anmelden kannst. Im nächsten Schritt lösche ich alle USER, die per default installiert sind. Enter für weiter."
