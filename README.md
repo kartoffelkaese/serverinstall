@@ -10,7 +10,7 @@ bash <(curl -s inst.gcal.ch)
 - test for user martin (adduser martin w/o pw, sshkey)
 - new root pw
 - new hostname
-- sshd: key only login, port 222
+- sshd: key only login, port 222, security
 - profilebanner
 - aliases
 - bash colors (green user/purple root)
