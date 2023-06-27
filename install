@@ -24,16 +24,16 @@ if [ "$UID" -gt 0 ]; then
 fi
 
 # MIRRORS
-echo -e "\e[45mChanging Mirrors\e[0m"
-mv /etc/apt/sources.list /etc/apt/sources.list-old
-echo -n "Raspbian/Debian 1/2: "
-read DIST
-if [[ $DIST == 1 ]]
-then
-  echo "deb https://ftp.halifax.rwth-aachen.de/raspbian/raspbian/ buster main contrib non-free rpi" > /etc/apt/sources.list
-else
-    echo -e "deb http://deb.debian.org/debian bullseye main\ndeb http://deb.debian.org/debian bullseye-updates main\ndeb http://security.debian.org/debian-security bullseye-security main\ndeb http://ftp.debian.org/debian bullseye-backports main" > /etc/apt/sources.list
-fi
+#echo -e "\e[45mChanging Mirrors\e[0m"
+#mv /etc/apt/sources.list /etc/apt/sources.list-old
+#echo -n "Raspbian/Debian 1/2: "
+#read DIST
+#if [[ $DIST == 1 ]]
+#then
+#  echo "deb https://ftp.halifax.rwth-aachen.de/raspbian/raspbian/ buster main contrib non-free rpi" > /etc/apt/sources.list
+#else
+#    echo -e "deb http://deb.debian.org/debian bullseye main\ndeb http://deb.debian.org/debian bullseye-updates main\ndeb http://security.debian.org/debian-security bullseye-security main\ndeb http://ftp.debian.org/debian bullseye-backports main" > /etc/apt/sources.list
+#fi
 
 # INSTALL THINGS
 echo -e "\e[45mUpdating\e[0m"
