@@ -1,6 +1,6 @@
+#!/bin/bash
 # Serverinstall for debian machines v1.5
 # does:
-## - mirrors for apt w/ choose option
 # - apt update && upgrade && install things
 # - tzdata && locales
 # - dump motd
@@ -16,24 +16,11 @@
 # - test logins (user/root)
 # - remove default ubuntu/pi users
 # - custom wsl things
-#!/bin/bash
 
 if [ "$UID" -gt 0 ]; then
      echo "Bitte als root ausführen!"
      exit 1
 fi
-
-# MIRRORS
-#echo -e "\e[45mChanging Mirrors\e[0m"
-#mv /etc/apt/sources.list /etc/apt/sources.list-old
-#echo -n "Raspbian/Debian 1/2: "
-#read DIST
-#if [[ $DIST == 1 ]]
-#then
-#  echo "deb https://ftp.halifax.rwth-aachen.de/raspbian/raspbian/ buster main contrib non-free rpi" > /etc/apt/sources.list
-#else
-#    echo -e "deb http://deb.debian.org/debian bullseye main\ndeb http://deb.debian.org/debian bullseye-updates main\ndeb http://security.debian.org/debian-security bullseye-security main\ndeb http://ftp.debian.org/debian bullseye-backports main" > /etc/apt/sources.list
-#fi
 
 # INSTALL THINGS
 echo -e "\e[45mUpdating\e[0m"
@@ -51,7 +38,7 @@ fi
 echo -e "\e[45msshkey for martin\e[0m"
 mkdir /home/martin/.ssh && echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1ppsf3ClLh/HCQzLjr/S2CyuPZsTngFyiqZb0jd9AI martin@DESKTOP" >> /home/martin/.ssh/authorized_keys && chown -R martin.martin /home/martin/.ssh
 echo -e "\e[45mupdates-sudo\e[0m"
-read -p "Copy: martin  ALL=(ALL) NOPASSWD: `which apt`"
+read -r "Copy: martin  ALL=(ALL) NOPASSWD: $(which apt)"
 visudo
 
 # ROOT
@@ -64,22 +51,23 @@ dpkg-reconfigure tzdata && dpkg-reconfigure locales
 echo -e "\e[45mDumping modt\e[0m"
 echo "" > /etc/motd
 echo -e "\e[45mnew hostname\e[0m"
-read -p 'New Hostname: ' hostname
-hostname $hostname
-echo $HOSTNAME > /etc/hostname
+read -r 'New Hostname: ' hostname
+hostname "$hostname"
+echo "$HOSTNAME" > /etc/hostname
 echo -e "\e[45mAliases & Profile-Banner\e[0m"
-echo "echo \"\"" >> /etc/profile
-echo "echo \"################################\"" >> /etc/profile
-echo "echo \"# Hallo \${USER}, \$HOSTNAME ab hier ;) #\"" >> /etc/profile
-echo "echo \"################################\"" >> /etc/profile
-echo "echo \"\"" >> /etc/profile
-echo "alias ll='ls -la --color=auto'" >> /etc/profile
-echo "alias checkupdates='sudo apt update && sudo apt -y upgrade'" >> /etc/profile
-echo "alias ping='prettyping --nolegend --nounicode'" >> /etc/profile
-echo "alias top='htop'" >> /etc/profile
-echo "alias find='fdfind'" >> /etc/profile
-echo "alias du='ncdu --color dark -rr'" >> /etc/profile
-echo "alias df='pydf'" >> /etc/profile
+{
+        echo ""
+        echo "################################"
+        echo "# Hallo ${USER}, $HOSTNAME ab hier ;) #"
+        echo "################################"
+        echo "alias ll='ls -la --color=auto'"
+        echo "alias checkupdates='sudo apt update && sudo apt -y upgrade'"
+        echo "alias ping='prettyping --nolegend --nounicode'"
+        echo "alias top='htop'"
+        echo "alias find='fdfind'"
+        echo "alias du='ncdu --color dark -rr'"
+        echo "alias df='pydf'"
+} >> /etc/profile
 source /etc/profile
 HISTCONTROL="ignorespace:erasedups"
 export HISTCONTROL
@@ -96,7 +84,7 @@ echo "KexAlgorithms curve25519-sha256 curve25519-sha256@libssh.org" >> /etc/ssh/
 echo "MACs hmac-sha2-512-etm@openssh.com" >> /etc/ssh/sshd_config
 sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && service sshd restart
 echo -e "\e[93mSSHD_CONFIG CHECKEN - PasswordAuthentication\e[0m"
-read -p "Mache eine zweite Shell auf und schau ob du dich anmelden kannst. Im nächsten Schritt lösche ich alle USER, die per default installiert sind. Enter für weiter."
+read -r "Mache eine zweite Shell auf und schau ob du dich anmelden kannst. Im nächsten Schritt lösche ich alle USER, die per default installiert sind. Enter für weiter."
 echo -e "\e[93mUser löschen - pi/ubuntu\e[0m"
 deluser --remove-home pi
 deluser --remove-home ubuntu
