@@ -1,21 +1,5 @@
 #!/bin/bash
 # Serverinstall for debian machines v1.5
-# does:
-# - apt update && upgrade && install things
-# - tzdata && locales
-# - dump motd
-# - test for user martin (adduser martin w/o pw, sshkey)
-# - new root pw
-# - new hostname
-# - sshd: key only login, port 222, security
-# - profilebanner
-# - aliases
-# - bash colors (green user/purple root)
-# - no-pw sudo for apt for martin
-# - warning check sshd manually
-# - test logins (user/root)
-# - remove default ubuntu/pi users
-# - custom wsl things
 
 if [ "$UID" -gt 0 ]; then
      echo "Bitte als root ausführen!"
@@ -82,7 +66,7 @@ echo "AuthenticationMethods publickey" >> /etc/ssh/sshd_config
 sed -i 's|#HostKey /etc/ssh/ssh_host_ed25519_key|HostKey /etc/ssh/ssh_host_ed25519_key|' /etc/ssh/sshd_config
 echo "KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org" >> /etc/ssh/sshd_config
 echo "MACs hmac-sha2-512-etm@openssh.com" >> /etc/ssh/sshd_config
-sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && sshd -t && service sshd restart
+sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && sshd -t && systemctl restart ssh.service
 echo -e "\e[93mSSHD_CONFIG CHECKEN - PasswordAuthentication\e[0m"
 read -r "Mache eine zweite Shell auf und schau ob du dich anmelden kannst. Im nächsten Schritt lösche ich alle USER, die per default installiert sind. Enter für weiter."
 echo -e "\e[93mUser löschen - pi/ubuntu\e[0m"
