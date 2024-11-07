@@ -68,10 +68,8 @@ echo "KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org" >> /etc/ssh/
 echo "MACs hmac-sha2-512-etm@openssh.com" >> /etc/ssh/sshd_config
 sed -i 's/#Port 22/Port 222/g' /etc/ssh/sshd_config && sshd -t && systemctl restart ssh.service
 echo -e "\e[93mSSHD_CONFIG CHECKEN - PasswordAuthentication\e[0m"
-read -r "Mache eine zweite Shell auf und schau ob du dich anmelden kannst. Im nächsten Schritt lösche ich alle USER, die per default installiert sind. Enter für weiter."
+read -r "Mache eine zweite Shell auf und schau ob du dich anmelden kannst. Enter für weiter."
 echo -e "\e[93mUser löschen - pi/ubuntu\e[0m"
-deluser --remove-home pi
-deluser --remove-home ubuntu
 
 # WSL
 echo -n "WSL? (.ssh/config+mount usb) [1] yes / [0] no"
